@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>nodeJS | Avery&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="JavaScript 是一個程式語言，會有程式語言本身所規範可以用的東西，例如用 var 宣告變數，用 if else 進行條件判斷，或者是使用 function 宣告函式，這些東西都是 JavaScript 這個程式語言本身就有的部分。 既然上面說了「程式語言本身就有的部分」，就代表也有一些東西其實是「不屬於 JavaScript 這個程式語言的」。 例如 document.querySelec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nodeJS">
+<meta property="og:url" content="https://avery210412.github.io/2022/04/01/nodeJS/index.html">
+<meta property="og:site_name" content="Avery&#39;s blog">
+<meta property="og:description" content="JavaScript 是一個程式語言，會有程式語言本身所規範可以用的東西，例如用 var 宣告變數，用 if else 進行條件判斷，或者是使用 function 宣告函式，這些東西都是 JavaScript 這個程式語言本身就有的部分。 既然上面說了「程式語言本身就有的部分」，就代表也有一些東西其實是「不屬於 JavaScript 這個程式語言的」。 例如 document.querySelec">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://static.coderbridge.com/img/techbridge/images/huli/js-async/p1.png">
+<meta property="article:published_time" content="2022-04-01T14:51:16.000Z">
+<meta property="article:modified_time" content="2022-04-01T14:54:05.786Z">
+<meta property="article:author" content="Avery">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="lidemy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://static.coderbridge.com/img/techbridge/images/huli/js-async/p1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Avery's blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Avery&#39;s blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">外接海馬體連線中...</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜尋"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://avery210412.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-nodeJS" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2022/04/01/nodeJS/" class="article-date">
+  <time class="dt-published" datetime="2022-04-01T14:51:16.000Z" itemprop="datePublished">2022-04-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      nodeJS
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>JavaScript 是一個程式語言，會有程式語言本身所規範可以用的東西，例如用 <code>var</code> 宣告變數，用 <code>if else</code> 進行條件判斷，或者是使用 <code>function</code> 宣告函式，這些東西都是 JavaScript 這個程式語言本身就有的部分。</p>
+<p>既然上面說了「程式語言本身就有的部分」，就代表也有一些東西其實是「不屬於 JavaScript 這個程式語言的」。</p>
+<p>例如 <code>document.querySelector(&#39;body&#39;)</code>，可以拿到 body 的 DOM 物件並且對它做操作，而操作之後會即時反應在瀏覽器的畫面上。</p>
+<p>這個 <code>document</code> 是哪來的？其實是<strong>瀏覽器提供給 JavaScript 的</strong>，這樣才能讓 JavaScript 透過 <code>document</code> 這個物件與瀏覽器進行溝通來操控 DOM。</p>
+<p>如果去翻 <strong>ECMAScript</strong> 的文件，會發現裡面完全沒有出現 <code>document</code> 這個東西，因為它不是這個程式語言本身的一部份，而是瀏覽器提供的東西。</p>
+<p>如果在瀏覽器上面跑 JavaScript，可以<strong>把瀏覽器稱作是 JavaScript 的「執行環境（runtime）」</strong>，因為 JavaScript 就是在瀏覽器上執行，十分合理。</p>
+<p>除了 <code>document</code> 以外，像是拿來計時的 <code>setTimeout</code> 與 <code>setInterval</code>，拿來做 ajax 的 <code>XMLHttpRequest</code> 與 <code>fetch</code>，這些都是瀏覽器這個執行環境所提供的東西。</p>
+<p>除了瀏覽器以外，還有其他 JavaScript 的執行環境，就叫做 Node.js。</p>
+<blockquote>
+<p>Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript engine.</p>
+</blockquote>
+<p>所以 JavaScript 程式碼可以選擇跑在瀏覽器上，透過瀏覽器這個執行環境提供的東西操控畫面，或者是發 Request 出去；也可以選擇跑在 Node.js 這個執行環境上面，使用 Node.js 提供的東西。</p>
+<p>那 Node.js 提供了什麼呢？例如 <code>fs</code>，全名為 <strong>file system</strong>，是控制檔案的介面，可以用 JavaScript 來讀寫電腦裡的檔案；還提供了 <code>http</code> 這個模組，可以用 JavaScript 來寫 server。</p>
+<p>詳情請參考底下的示意圖：</p>
+<p><img src="https://static.coderbridge.com/img/techbridge/images/huli/js-async/p1.png" alt="JavaScript runtime"></p>
+<p>可以很清楚地看到當 JavaScript 在不同環境底下執行時，可以用的東西也不一樣，端看執行環境提供了什麼。</p>
+<p>上圖中 <code>setTimeout</code> 在兩個環境都有出現，因為這兩個環境都覺得<strong>計時器</strong>這功能很重要，所以都提供了 <code>setTimeout</code> 這個函式給開發者使用。在兩個環境上的功能雖然是一模一樣的，但要注意的是<strong>因為執行環境不同，所以背後的實作方式以及原理也不同</strong>。</p>
+<p>另外，執行環境不同，執行方式也會不同。以瀏覽器來說，是用 <code>&lt;script src=&quot;index.js&quot;&gt;</code> 去引入一個 JavaScript 檔案，就可以在瀏覽器上執行；以 Node.js 來說，必須先在電腦上安裝 Node.js 這個執行環境，然後以 CLI 的方式輸入 <code>node index.js</code> 這個指令來執行。</p>
+<p>整理一下重點：</p>
+<ol>
+<li><p>JavaScript 只是一個程式語言，需要搭配<strong>執行環境</strong>提供的東西才能有效使用，例如：<code>setTiemout</code>、<code>document</code> 等</p>
+</li>
+<li><p>最常見的 JavaScript 執行環境有兩個，一個是瀏覽器，一個是 Node.js</p>
+</li>
+<li><p>不同的執行環境會提供不同的東西，例如：Node.js 提供了 <code>http</code> 這個模組讓 JavaScript 可以寫一個伺服器，但瀏覽器就沒有提供這種東西</p>
+</li>
+</ol>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p><a target="_blank" rel="noopener" href="https://blog.huli.tw/2019/10/04/javascript-async-sync-and-callback/">JavaScript 中的同步與非同步（上）：先成為 callback 大師吧！</a></p>
+<p><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10191345">不只是瀏覽器！JavaScript 征服世界的第一步 - Node.js</a></p>
+<p><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10242676">在不同 runtime 上執行的 JavaScript</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://avery210412.github.io/2022/04/01/nodeJS/" data-id="cl1gkm2f800010s924xfp06bw" data-title="nodeJS" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lidemy/" rel="tag">lidemy</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2022/04/01/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lidemy/" rel="tag">lidemy</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/lidemy/" style="font-size: 10px;">lidemy</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">四月 2022</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/04/01/nodeJS/">nodeJS</a>
+          </li>
+        
+          <li>
+            <a href="/2022/04/01/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2022 Avery<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

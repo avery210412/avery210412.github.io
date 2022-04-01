@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Avery&#39;s blog</title>
+  
+  <subtitle>外接海馬體連線中...</subtitle>
+  <link href="https://avery210412.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://avery210412.github.io/"/>
+  <updated>2022-04-01T14:54:05.786Z</updated>
+  <id>https://avery210412.github.io/</id>
+  
+  <author>
+    <name>Avery</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>nodeJS</title>
+    <link href="https://avery210412.github.io/2022/04/01/nodeJS/"/>
+    <id>https://avery210412.github.io/2022/04/01/nodeJS/</id>
+    <published>2022-04-01T14:51:16.000Z</published>
+    <updated>2022-04-01T14:54:05.786Z</updated>
+    
+    <content type="html"><![CDATA[<p>JavaScript 是一個程式語言，會有程式語言本身所規範可以用的東西，例如用 <code>var</code> 宣告變數，用 <code>if else</code> 進行條件判斷，或者是使用 <code>function</code> 宣告函式，這些東西都是 JavaScript 這個程式語言本身就有的部分。</p><p>既然上面說了「程式語言本身就有的部分」，就代表也有一些東西其實是「不屬於 JavaScript 這個程式語言的」。</p><p>例如 <code>document.querySelector(&#39;body&#39;)</code>，可以拿到 body 的 DOM 物件並且對它做操作，而操作之後會即時反應在瀏覽器的畫面上。</p><p>這個 <code>document</code> 是哪來的？其實是<strong>瀏覽器提供給 JavaScript 的</strong>，這樣才能讓 JavaScript 透過 <code>document</code> 這個物件與瀏覽器進行溝通來操控 DOM。</p><p>如果去翻 <strong>ECMAScript</strong> 的文件，會發現裡面完全沒有出現 <code>document</code> 這個東西，因為它不是這個程式語言本身的一部份，而是瀏覽器提供的東西。</p><p>如果在瀏覽器上面跑 JavaScript，可以<strong>把瀏覽器稱作是 JavaScript 的「執行環境（runtime）」</strong>，因為 JavaScript 就是在瀏覽器上執行，十分合理。</p><p>除了 <code>document</code> 以外，像是拿來計時的 <code>setTimeout</code> 與 <code>setInterval</code>，拿來做 ajax 的 <code>XMLHttpRequest</code> 與 <code>fetch</code>，這些都是瀏覽器這個執行環境所提供的東西。</p><p>除了瀏覽器以外，還有其他 JavaScript 的執行環境，就叫做 Node.js。</p><blockquote><p>Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript engine.</p></blockquote><p>所以 JavaScript 程式碼可以選擇跑在瀏覽器上，透過瀏覽器這個執行環境提供的東西操控畫面，或者是發 Request 出去；也可以選擇跑在 Node.js 這個執行環境上面，使用 Node.js 提供的東西。</p><p>那 Node.js 提供了什麼呢？例如 <code>fs</code>，全名為 <strong>file system</strong>，是控制檔案的介面，可以用 JavaScript 來讀寫電腦裡的檔案；還提供了 <code>http</code> 這個模組，可以用 JavaScript 來寫 server。</p><p>詳情請參考底下的示意圖：</p><p><img src="https://static.coderbridge.com/img/techbridge/images/huli/js-async/p1.png" alt="JavaScript runtime"></p><p>可以很清楚地看到當 JavaScript 在不同環境底下執行時，可以用的東西也不一樣，端看執行環境提供了什麼。</p><p>上圖中 <code>setTimeout</code> 在兩個環境都有出現，因為這兩個環境都覺得<strong>計時器</strong>這功能很重要，所以都提供了 <code>setTimeout</code> 這個函式給開發者使用。在兩個環境上的功能雖然是一模一樣的，但要注意的是<strong>因為執行環境不同，所以背後的實作方式以及原理也不同</strong>。</p><p>另外，執行環境不同，執行方式也會不同。以瀏覽器來說，是用 <code>&lt;script src=&quot;index.js&quot;&gt;</code> 去引入一個 JavaScript 檔案，就可以在瀏覽器上執行；以 Node.js 來說，必須先在電腦上安裝 Node.js 這個執行環境，然後以 CLI 的方式輸入 <code>node index.js</code> 這個指令來執行。</p><p>整理一下重點：</p><ol><li><p>JavaScript 只是一個程式語言，需要搭配<strong>執行環境</strong>提供的東西才能有效使用，例如：<code>setTiemout</code>、<code>document</code> 等</p></li><li><p>最常見的 JavaScript 執行環境有兩個，一個是瀏覽器，一個是 Node.js</p></li><li><p>不同的執行環境會提供不同的東西，例如：Node.js 提供了 <code>http</code> 這個模組讓 JavaScript 可以寫一個伺服器，但瀏覽器就沒有提供這種東西</p></li></ol><h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p><a href="https://blog.huli.tw/2019/10/04/javascript-async-sync-and-callback/">JavaScript 中的同步與非同步（上）：先成為 callback 大師吧！</a></p><p><a href="https://ithelp.ithome.com.tw/articles/10191345">不只是瀏覽器！JavaScript 征服世界的第一步 - Node.js</a></p><p><a href="https://ithelp.ithome.com.tw/articles/10242676">在不同 runtime 上執行的 JavaScript</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;JavaScript 是一個程式語言，會有程式語言本身所規範可以用的東西，例如用 &lt;code&gt;var&lt;/code&gt; 宣告變數，用 &lt;code&gt;if else&lt;/code&gt; 進行條件判斷，或者是使用 &lt;code&gt;function&lt;/code&gt; 宣告函式，這些東西都是 Java</summary>
+      
+    
+    
+    
+    
+    <category term="javascript" scheme="https://avery210412.github.io/tags/javascript/"/>
+    
+    <category term="lidemy" scheme="https://avery210412.github.io/tags/lidemy/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="https://avery210412.github.io/2022/04/01/hello-world/"/>
+    <id>https://avery210412.github.io/2022/04/01/hello-world/</id>
+    <published>2022-04-01T14:33:39.736Z</published>
+    <updated>2022-04-01T14:33:39.736Z</updated>
+    
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+</feed>
