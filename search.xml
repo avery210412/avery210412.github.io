@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>nodeJS</title>
-    <url>/javascript/20220402/2599608651/</url>
+    <title>[JS101] Node.js 環境建置</title>
+    <url>/javascript/20220401/1595818614/</url>
     <content><![CDATA[<p>JavaScript 是一個程式語言，會有程式語言本身所規範可以用的東西，例如用 <code>var</code> 宣告變數，用 <code>if else</code> 進行條件判斷，或者是使用 <code>function</code> 宣告函式，這些東西都是 JavaScript 這個程式語言本身就有的部分。</p>
 <p>既然上面說了「程式語言本身就有的部分」，就代表也有一些東西其實是「不屬於 JavaScript 這個程式語言的」。</p>
 <p>例如 <code>document.querySelector(&#39;body&#39;)</code>，可以拿到 body 的 DOM 物件並且對它做操作，而操作之後會即時反應在瀏覽器的畫面上。</p>
