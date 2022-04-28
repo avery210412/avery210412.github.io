@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.svg">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Sans TC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"avery210412.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言命令列介面（CLI）是在圖形使用者介面（GUI）得到普及之前，使用最為廣泛的使用者介面，通常認為 CLI 沒有 GUI 那麼方便操作，是因為 CLI 需要使用者記憶操作的指令，通過鍵盤輸入指令，電腦接收到指令後予以執行。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[CMD101] Command Line Interface">
+<meta property="og:url" content="https://avery210412.github.io/tool/20220428/3915517411/index.html">
+<meta property="og:site_name" content="Avery&#39;s blog">
+<meta property="og:description" content="前言命令列介面（CLI）是在圖形使用者介面（GUI）得到普及之前，使用最為廣泛的使用者介面，通常認為 CLI 沒有 GUI 那麼方便操作，是因為 CLI 需要使用者記憶操作的指令，通過鍵盤輸入指令，電腦接收到指令後予以執行。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://imgur.com/HpO14MU.png">
+<meta property="og:image" content="https://i.imgur.com/s3Kool3.png">
+<meta property="article:published_time" content="2022-04-28T04:00:00.000Z">
+<meta property="article:modified_time" content="2022-04-28T15:52:22.792Z">
+<meta property="article:author" content="Avery">
+<meta property="article:tag" content="Lidemy">
+<meta property="article:tag" content="Command Line">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://imgur.com/HpO14MU.png">
+
+<link rel="canonical" href="https://avery210412.github.io/tool/20220428/3915517411/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>[CMD101] Command Line Interface | Avery's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Avery's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Avery's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">外接海馬體連線中...</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔<span class="badge">1</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類<span class="badge">1</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">2</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/avery210412" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://avery210412.github.io/tool/20220428/3915517411/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/git-avatar.png">
+      <meta itemprop="name" content="Avery">
+      <meta itemprop="description" content="Welcome to my Hippocampus.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Avery's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [CMD101] Command Line Interface
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2022-04-28 12:00:00" itemprop="dateCreated datePublished" datetime="2022-04-28T12:00:00+08:00">2022-04-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tool/" itemprop="url" rel="index"><span itemprop="name">tool</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>命令列介面</strong>（CLI）是在<strong>圖形使用者介面</strong>（GUI）得到普及之前，使用最為廣泛的使用者介面，通常認為 CLI 沒有 GUI 那麼方便操作，是因為 CLI 需要使用者記憶操作的指令，通過鍵盤輸入指令，電腦接收到指令後予以執行。</p>
+<span id="more"></span>
+
+<h2 id="What-is-CLI？"><a href="#What-is-CLI？" class="headerlink" title="What is CLI？"></a>What is CLI？</h2><p><img src="https://imgur.com/HpO14MU.png" alt="CLI v.s. GUI"></p>
+<p>相較於圖形使用者介面（Graphical User Interface, GUI）透過點擊圖示（icon），開啟圖形化視窗操作電腦的方式，命令列介面（Command Line Interface, CLI）是一種以<strong>文本</strong>為主的應用程式，使用者透過輸入指令，與電腦進行溝通。</p>
+<p>雖然現在的電腦系統都提供了圖形化的操作方式，但並沒有停止提供文字模式的命令列操作方式。使用 CLI 有以下主因：</p>
+<ul>
+<li><p>速度</p>
+<p>GUI 操作電腦的原理，也是在調用 CLI 指令，直接輸入 CLI 指令操作電腦更快速。</p>
+</li>
+<li><p>功能</p>
+<p>GUI 只有涵蓋一般使用者<strong>常用</strong>的電腦操作指令，CLI 對於<strong>電腦系統</strong>有更精確的控制。</p>
+<p>有些<strong>伺服器系統</strong>例如：資料庫（Database），由於資源的考量，並不支援 GUI 操作系統，因此只能使用 CLI 與伺服器進行溝通。</p>
+</li>
+<li><p>自動化</p>
+<p>當需要大規模處理邏輯相同的任務時，透過 CLI 撰寫腳本語言（Scripting language），可以更輕鬆的管理系統。</p>
+</li>
+</ul>
+<h2 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h2><h3 id="目錄與檔案管理"><a href="#目錄與檔案管理" class="headerlink" title="目錄與檔案管理"></a>目錄與檔案管理</h3><table>
+<thead>
+<tr>
+<th>指令</th>
+<th>名稱</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pwd</code></td>
+<td>Print Working Directory</td>
+<td>顯示目前所在的目錄</td>
+</tr>
+<tr>
+<td><code>cd</code></td>
+<td>Change Directory</td>
+<td>切換目錄</td>
+</tr>
+<tr>
+<td><code>ls</code></td>
+<td>List</td>
+<td>列出當前所在目錄的檔案清單</td>
+</tr>
+<tr>
+<td><code>ls -a</code></td>
+<td></td>
+<td>列出當前所在目錄的檔案清單，包含<strong>隱藏檔</strong></td>
+</tr>
+<tr>
+<td><code>ls -l</code></td>
+<td></td>
+<td>以<strong>長資料</strong>的形式，列出當前所在目錄的檔案清單（包含檔案屬性與權限）</td>
+</tr>
+<tr>
+<td><code>mkdir</code></td>
+<td>Make Directory</td>
+<td>建立新目錄</td>
+</tr>
+<tr>
+<td><code>rmdir</code></td>
+<td>Remove Directory</td>
+<td>刪除「空」目錄</td>
+</tr>
+<tr>
+<td><code>cp</code></td>
+<td>Copy</td>
+<td>複製檔案</td>
+</tr>
+<tr>
+<td><code>cp -r</code></td>
+<td></td>
+<td>複製目錄</td>
+</tr>
+<tr>
+<td><code>mv</code></td>
+<td>Move</td>
+<td><strong>移動</strong>檔案或目錄 &#x2F; <strong>變更檔名</strong></td>
+</tr>
+<tr>
+<td><code>rm</code></td>
+<td>Remove</td>
+<td>移除檔案</td>
+</tr>
+<tr>
+<td><code>rm -r</code></td>
+<td></td>
+<td>移除目錄</td>
+</tr>
+</tbody></table>
+<ul>
+<li>注意：使用 <code>rmdir</code> 刪除目錄時，被刪除的目錄裡面必定不能存在其他的目錄或檔案。當目錄裡面還有子目錄時，使用 <code>rm -r</code> 指令，該目錄與其子目錄會一併被刪除。</li>
+</ul>
+<h3 id="目錄與路徑"><a href="#目錄與路徑" class="headerlink" title="目錄與路徑"></a>目錄與路徑</h3><ul>
+<li><p>絕對路徑</p>
+<p>由<strong>根目錄</strong>（<code>/</code>）開始寫起的檔名或目錄名稱。</p>
+<p>範例：移至 <code>/usr/share/doc</code> 目錄</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/share/doc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>相對路徑</p>
+<p>相對於<strong>目前路徑</strong>的檔名或目錄名稱。</p>
+<p>範例：從 <code>/usr/share/doc</code> 目錄移至 <code>/usr/share/man</code> 目錄</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ../man</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>切換目錄（<code>cd</code>）的操作</p>
+<table>
+<thead>
+<tr>
+<th>符號</th>
+<th>定義</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>.</code></td>
+<td>同一層目錄</td>
+</tr>
+<tr>
+<td><code>..</code></td>
+<td>上一層目錄</td>
+</tr>
+<tr>
+<td><code>-</code></td>
+<td>前一個工作目錄</td>
+</tr>
+<tr>
+<td><code>~</code></td>
+<td>家目錄</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h3 id="檔案內容查閱"><a href="#檔案內容查閱" class="headerlink" title="檔案內容查閱"></a>檔案內容查閱</h3><table>
+<thead>
+<tr>
+<th>指令</th>
+<th>名稱</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>touch</code></td>
+<td>Touch</td>
+<td>修改檔案時間 &#x2F; 建立新檔案</td>
+</tr>
+<tr>
+<td><code>cat</code></td>
+<td>Concatenate</td>
+<td>將檔案內容<strong>完整</strong>顯示在 Terminal 畫面中</td>
+</tr>
+<tr>
+<td><code>less</code></td>
+<td>Less</td>
+<td>將檔案內容以<strong>分頁</strong>形式顯示在 Terminal 畫面中</td>
+</tr>
+<tr>
+<td><code>head</code></td>
+<td>Head</td>
+<td>取出檔案前面幾行的內容</td>
+</tr>
+<tr>
+<td><code>tail</code></td>
+<td>Tail</td>
+<td>取出檔案後面幾行的內容</td>
+</tr>
+<tr>
+<td><code>file</code></td>
+<td>File</td>
+<td>檢查檔案類型</td>
+</tr>
+</tbody></table>
+<h3 id="Vim-編輯文字檔案"><a href="#Vim-編輯文字檔案" class="headerlink" title="Vim 編輯文字檔案"></a>Vim 編輯文字檔案</h3><p>Vim 主要是使用<strong>模式的切換</strong>來進行輸入、移動游標、選取、複製及貼上等操作。Vim 常用的模式有兩種：<strong>Normal 模式</strong>以及 <strong>Insert 模式</strong>。</p>
+<p><img src="https://i.imgur.com/s3Kool3.png" alt="Vim"></p>
+<ul>
+<li><p>Normal 模式：無法輸入文字，僅能進行複製、貼上、存檔或離開動作。</p>
+</li>
+<li><p>Insert 模式：可以編輯文字檔案。</p>
+</li>
+<li><p>透過 Vim 打開文檔後，輸入 <code>i</code>、<code>a</code> 或 <code>o</code>，進入 Insert 模式。</p>
+</li>
+<li><p>文檔編輯結束，輸入 <code>Ese</code>，回到 Normal 模式。</p>
+</li>
+<li><p>在 Normal 模式下，輸入 <code>:wq</code> 執行存檔並關閉檔案，退出 Vim 編輯器。</p>
+</li>
+<li><p>常用來編輯 Git Commit 訊息。</p>
+</li>
+</ul>
+<h3 id="網路相關指令"><a href="#網路相關指令" class="headerlink" title="網路相關指令"></a>網路相關指令</h3><ul>
+<li><p><code>ping</code>：網路檢測工具，檢查自己與特定設備之間的網路是否暢通</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping google.com</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Pinging google.com [172.217.163.46] with 32 bytes of data:</span><br><span class="line">Reply from 172.217.163.46: bytes=32 time=9ms TTL=113</span><br><span class="line">Reply from 172.217.163.46: bytes=32 time=9ms TTL=113</span><br><span class="line">Reply from 172.217.163.46: bytes=32 time=8ms TTL=113</span><br><span class="line">Reply from 172.217.163.46: bytes=32 time=13ms TTL=113</span><br><span class="line"></span><br><span class="line">Ping statistics for 172.217.163.46:</span><br><span class="line">    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),</span><br><span class="line">Approximate round trip times in milli-seconds:</span><br><span class="line">    Minimum = 8ms, Maximum = 13ms, Average = 9ms</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>nslookup</code>：查詢 DNS 回應是否正常</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nslookup google.com</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Non-authoritative answer:</span><br><span class="line">Server:  hitronhub.home</span><br><span class="line">Address:  192.168.0.1</span><br><span class="line"></span><br><span class="line">Name:  google.com</span><br><span class="line">Addresses:  2404:6800:4012:4::200e</span><br><span class="line">            172.217.163.46</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>wget</code>：下載網路資源至當前目錄。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget google.com</span><br></pre></td></tr></table></figure>
+
+<p>將 <code>google.com</code> 的 <strong>html 頁面</strong>下載至當前目錄。</p>
+</li>
+<li><p><code>curl</code>：與 <code>wget</code> 相似，可以用來下載網路資源，但功能比 <code>wget</code> 更強大，使用 <code>curl</code> 進行 HTTP Request，可以測試 Restful api。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST -H <span class="string">&#x27;Content-Type: application/json&#x27;</span> -d <span class="string">&#x27;&#123;&quot;name&quot;: &quot;Avery&quot;&#125;&#x27;</span> <span class="string">&#x27;https://www.example.com/api/members&#x27;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="其他常用指令"><a href="#其他常用指令" class="headerlink" title="其他常用指令"></a>其他常用指令</h3><table>
+<thead>
+<tr>
+<th>指令</th>
+<th>名稱</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>clear</code></td>
+<td>Clear</td>
+<td>清除 Terminal 畫面</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>Date</td>
+<td>印出當前日期</td>
+</tr>
+<tr>
+<td><code>grep</code></td>
+<td>Global Regular Expression Print</td>
+<td>在指定檔案中尋找特定字串</td>
+</tr>
+<tr>
+<td><code>echo</code></td>
+<td>Echo</td>
+<td>將字串輸出到 Terminal 畫面</td>
+</tr>
+<tr>
+<td>&amp;#124;</td>
+<td>Pipe</td>
+<td>把前面指令的<strong>輸出</strong>，作為後面指令的<strong>輸入</strong></td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>Redirect</td>
+<td>重新導向</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>Pipe 範例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> file.txt | grep Hello</span><br></pre></td></tr></table></figure>
+
+<p>從印出的 file.txt 內容中，尋找字串 <code>Hello</code> 並輸出。</p>
+</li>
+<li><p>Redirect 範例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;Hello&#x27;</span> &gt; file.txt</span><br></pre></td></tr></table></figure>
+
+<p>產生字串 <code>Hello</code>，並覆蓋 file.txt 內容。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;Hi&#x27;</span> &gt;&gt; file.txt</span><br></pre></td></tr></table></figure>
+
+<p>產生字串 <code>Hi</code> ，並將內容新增至 file.txt 最後面。</p>
+</li>
+</ul>
+<h4 id="CLI-參考資料"><a href="#CLI-參考資料" class="headerlink" title="CLI 參考資料"></a>CLI 參考資料</h4><p><a target="_blank" rel="noopener" href="https://tableplus.com/blog/2018/08/cli-vs-gui-which-one-is-better.html">CLI vs GUI - Which one is better?</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.techbridge.cc/2017/12/23/linux-commnd-line-tutorial/">Linux Command 命令列指令與基本操作入門教學</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.techbridge.cc/2019/02/01/linux-curl-command-tutorial/">Linux Curl Command 指令與基本操作入門教學</a></p>
+<p><a target="_blank" rel="noopener" href="http://hackgrass.blogspot.com/2017/04/linuxunix-like-command-line.html">基礎 Linux（UNIX-Like）指令整理介紹</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Lidemy/" rel="tag"><i class="fa fa-tag"></i> Lidemy</a>
+              <a href="/tags/Command-Line/" rel="tag"><i class="fa fa-tag"></i> Command Line</a>
+          </div>
+
+        
+
+
+        
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-is-CLI%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">What is CLI？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">常用指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E9%8C%84%E8%88%87%E6%AA%94%E6%A1%88%E7%AE%A1%E7%90%86"><span class="nav-number">3.1.</span> <span class="nav-text">目錄與檔案管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E9%8C%84%E8%88%87%E8%B7%AF%E5%BE%91"><span class="nav-number">3.2.</span> <span class="nav-text">目錄與路徑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AA%94%E6%A1%88%E5%85%A7%E5%AE%B9%E6%9F%A5%E9%96%B1"><span class="nav-number">3.3.</span> <span class="nav-text">檔案內容查閱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Vim-%E7%B7%A8%E8%BC%AF%E6%96%87%E5%AD%97%E6%AA%94%E6%A1%88"><span class="nav-number">3.4.</span> <span class="nav-text">Vim 編輯文字檔案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B6%B2%E8%B7%AF%E7%9B%B8%E9%97%9C%E6%8C%87%E4%BB%A4"><span class="nav-number">3.5.</span> <span class="nav-text">網路相關指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="nav-number">3.6.</span> <span class="nav-text">其他常用指令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CLI-%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="nav-number">3.6.1.</span> <span class="nav-text">CLI 參考資料</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Avery"
+      src="/images/git-avatar.png">
+  <p class="site-author-name" itemprop="name">Avery</p>
+  <div class="site-description" itemprop="description">Welcome to my Hippocampus.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/avery210412" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;avery210412" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:avery210412@gmail.com" title="E-Mail → mailto:avery210412@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Avery</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
