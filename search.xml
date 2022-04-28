@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>[CMD101] Command Line Interface</title>
-    <url>/Tool/command-line-interface/</url>
+    <url>/tool/command-line-interface/</url>
     <content><![CDATA[<h2 id="前言">前言</h2>
 <p><strong>命令列介面</strong>（CLI）是在<strong>圖形使用者介面</strong>（GUI）得到普及之前，使用最為廣泛的使用者介面，通常認為 CLI 沒有 GUI 那麼方便操作，是因為 CLI 需要使用者記憶操作的指令，通過鍵盤輸入指令，電腦接收到指令後予以執行。</p>
 <span id="more"></span>
@@ -295,7 +295,7 @@
 <p><a href="http://hackgrass.blogspot.com/2017/04/linuxunix-like-command-line.html">基礎 Linux（UNIX-Like）指令整理介紹</a></p>
 ]]></content>
       <categories>
-        <category>Tool</category>
+        <category>tool</category>
       </categories>
       <tags>
         <tag>Lidemy</tag>
