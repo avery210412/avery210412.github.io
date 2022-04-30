@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.svg">
+  <link rel="mask-icon" href="/images/favicon.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Sans TC:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"avery210412.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言 在軟體開發領域，對原始碼進行版本控管是非常重要的一件事。Git 是一套分散式版本控管系統（Distributed Version Control System），支援本地操作、遠端協作、彈性的分支與合併、原始碼審核（Code Review）等功能，對專案原始碼的品質管理很有幫助。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[GIT101] Git Version Control">
+<meta property="og:url" content="https://avery210412.github.io/tool/git-version-control/index.html">
+<meta property="og:site_name" content="Avery&#39;s blog">
+<meta property="og:description" content="前言 在軟體開發領域，對原始碼進行版本控管是非常重要的一件事。Git 是一套分散式版本控管系統（Distributed Version Control System），支援本地操作、遠端協作、彈性的分支與合併、原始碼審核（Code Review）等功能，對專案原始碼的品質管理很有幫助。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://imgur.com/CWDES3g.png">
+<meta property="og:image" content="https://imgur.com/dr2C7BQ.png">
+<meta property="og:image" content="https://imgur.com/Nb1sc7J.png">
+<meta property="og:image" content="https://imgur.com/eY3vFN8.png">
+<meta property="og:image" content="https://imgur.com/sFl6rsZ.gif">
+<meta property="og:image" content="https://imgur.com/rOFASNC.gif">
+<meta property="og:image" content="https://imgur.com/wQmzfvH.png">
+<meta property="og:image" content="https://imgur.com/eAJMurC.png">
+<meta property="og:image" content="https://imgur.com/Edjec69.png">
+<meta property="og:image" content="https://imgur.com/BOWWGhq.png">
+<meta property="og:image" content="https://imgur.com/gh2tuar.gif">
+<meta property="og:image" content="https://imgur.com/kiAcFZ6.gif">
+<meta property="og:image" content="https://imgur.com/OXgklx2.gif">
+<meta property="og:image" content="https://imgur.com/rSN5i9L.png">
+<meta property="og:image" content="https://imgur.com/UWOIgkf.gif">
+<meta property="og:image" content="https://imgur.com/zStUuVM.png">
+<meta property="og:image" content="https://imgur.com/SXpZV0E.png">
+<meta property="og:image" content="https://imgur.com/o7Jjyn1.png">
+<meta property="og:image" content="https://imgur.com/TR4NUjH.png">
+<meta property="og:image" content="https://imgur.com/5Pngthu.png">
+<meta property="og:image" content="https://imgur.com/5Pngthu.png">
+<meta property="og:image" content="https://imgur.com/QUQ5aAH.png">
+<meta property="og:image" content="https://imgur.com/tPCaQE5.gif">
+<meta property="og:image" content="https://imgur.com/RtefJ9S.gif">
+<meta property="og:image" content="https://i.imgur.com/gns2luN.png">
+<meta property="og:image" content="https://imgur.com/Oq2TpJc.png">
+<meta property="og:image" content="https://i.imgur.com/YxNhiqA.png">
+<meta property="og:image" content="https://i.imgur.com/ehEeTyx.png">
+<meta property="og:image" content="https://i.imgur.com/1XdLZa1.png">
+<meta property="og:image" content="https://i.imgur.com/ser2wXQ.png">
+<meta property="og:image" content="https://imgur.com/ibRwwDN.png">
+<meta property="og:image" content="https://i.imgur.com/IYJgbY5.png">
+<meta property="og:image" content="https://i.imgur.com/zzNkt5X.jpg">
+<meta property="article:published_time" content="2022-04-29T04:36:44.000Z">
+<meta property="article:modified_time" content="2022-04-30T15:24:51.215Z">
+<meta property="article:author" content="Avery">
+<meta property="article:tag" content="Lidemy">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="GitHub">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://imgur.com/CWDES3g.png">
+
+<link rel="canonical" href="https://avery210412.github.io/tool/git-version-control/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>[GIT101] Git Version Control | Avery's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Avery's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Avery's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">外接海馬體連線中...</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類<span class="badge">1</span></a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤<span class="badge">4</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/avery210412" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://avery210412.github.io/tool/git-version-control/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/git-avatar.png">
+      <meta itemprop="name" content="Avery">
+      <meta itemprop="description" content="Welcome to my Hippocampus.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Avery's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [GIT101] Git Version Control
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2022-04-29 12:36:44" itemprop="dateCreated datePublished" datetime="2022-04-29T12:36:44+08:00">2022-04-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tool/" itemprop="url" rel="index"><span itemprop="name">tool</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言-2">前言</h2>
+<p>在軟體開發領域，對原始碼進行<strong>版本控管</strong>是非常重要的一件事。Git 是一套分散式版本控管系統（Distributed Version Control System），支援本地操作、遠端協作、彈性的分支與合併、原始碼審核（Code Review）等功能，對專案原始碼的品質管理很有幫助。</p>
+<span id="more"></span>
+<h2 id="What-is-Git？">What is Git？</h2>
+<p>一個檔案可能會經過多次的修改，如果將每一次的修改都保存下來，這個行為就是「版本控制」。一般使用者在進行版本控制的時候，大多都是以「資料夾」為單位，如下圖所示：</p>
+<p><img src="https://imgur.com/CWDES3g.png" alt="version control by folder"></p>
+<p>現在有一個名為 <code>resume</code> 的目錄，目錄最初存放了 3 個檔案。在此之後也許會對 <code>resume</code> 目錄中的檔案有些操作，不論是新增、刪除檔案，或是修改檔案內容，只要「<code>resume</code> 目錄的<strong>狀態有變化</strong>」，就稱之為一個「<strong>版本</strong>」。</p>
+<p><img src="https://imgur.com/dr2C7BQ.png" alt="version control"></p>
+<p>以日期為目錄名稱進行版本控制，雖然可以知道在什麼時間點修改過檔案，但是卻不能在第一時間反應，在那個時間點對檔案做了什麼變動，也無法比較兩個時間點間的檔案差異。</p>
+<p>Git 就是一種版本控制系統，清楚地記錄每個檔案在什麼時候被新增、什麼時候被修改或刪除，透過 Commit Message 可以看到以前的歷史紀錄、和上一個版本差異；在多人協作方面，Git 擁有快速的分支與合併機制，強力支援分散式開發模式，有效率的處理大型專案。</p>
+<h2 id="Git-基本指令">Git 基本指令</h2>
+<h3 id="初始化目錄">初始化目錄</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> /desktop              <span class="comment"># 切換至 /desktop 目錄</span></span><br><span class="line">$ <span class="built_in">mkdir</span> git-practice       <span class="comment"># 建立 git-practice 目錄</span></span><br><span class="line">$ <span class="built_in">cd</span> git-practice          <span class="comment"># 切換至 git-practice 目錄</span></span><br><span class="line">$ git init                 <span class="comment"># 初始化目錄，讓 Git 對這個目錄開始進行版控</span></span><br><span class="line">Initialized empty Git repository <span class="keyword">in</span> /desktop/git-practice/.git/</span><br></pre></td></tr></table></figure>
+<p><code>git init</code> 會在目錄建立一個 <code>.git</code> 隱藏目錄，整個版控的精華就在這裡面。</p>
+<div class="note danger">
+            <p>🔴<strong>注意</strong><br>空的目錄是無法被 Commit 的，因為 Git 在計算、產生物件的時候，是根據「<strong>檔案變化的內容</strong>」去做計算的，內容不可以為空。</p>
+          </div> 
+<h3 id="查詢目錄狀態">查詢目錄狀態</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line"></span><br><span class="line">No commits yet</span><br><span class="line"></span><br><span class="line">nothing to commit (create/copy files and use <span class="string">&quot;git add&quot;</span> to track)</span><br></pre></td></tr></table></figure>
+<p>在這個目錄裡，除了 Git 初始化目錄後產生的 <code>.git</code> 隱藏目錄外，其他什麼都沒有，所以上面這段訊息的意思是「現在沒有東西可以提交（nothing to commit）」。</p>
+<h3 id="加入版控追蹤">加入版控追蹤</h3>
+<p>在目錄裡新增一個 <code>index.html</code> 檔案，使用 <code>git status</code> 指令查詢目錄狀態：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">touch</span> index.html</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line"></span><br><span class="line">No commits yet</span><br><span class="line"></span><br><span class="line">Untracked files:</span><br><span class="line">  (use <span class="string">&quot;git add &lt;file&gt;...&quot;</span> to include <span class="keyword">in</span> what will be committed)</span><br><span class="line"></span><br><span class="line">        index.html</span><br><span class="line"></span><br><span class="line">nothing added to commit but untracked files present (use <span class="string">&quot;git add&quot;</span> to track)</span><br></pre></td></tr></table></figure>
+<p><code>index.html</code> 檔案目前的狀態是 <strong>Untracked files</strong>，意思是這個檔案<strong>尚未被加到 Git 版控系統</strong>裡，還沒開始正式被 Git「追蹤」，它只是剛剛才加入這個目錄而已。</p>
+<p>使用 <code>git add index.html</code> 指令，將 <code>index.html</code> 檔案交給 Git，讓 Git 開始追蹤它。再次使用 <code>git status</code> 指令查詢目錄狀態：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ git add index.html</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line"></span><br><span class="line">No commits yet</span><br><span class="line"></span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use <span class="string">&quot;git rm --cached &lt;file&gt;...&quot;</span> to unstage)</span><br><span class="line"></span><br><span class="line">        new file:   index.html</span><br></pre></td></tr></table></figure>
+<p><code>index.html</code> 檔案的狀態從 <strong>Untracked files</strong> 變成 <strong>new file</strong> 狀態了，表示這個檔案已經被安置到<strong>暫存區</strong>（<strong>Staging Area</strong>），等待稍後跟其它檔案一起被存到<strong>儲存庫</strong>（<strong>Repository</strong>）裡。</p>
+<div class="note ">
+            <p>🌀<strong>狀況題</strong><br>如果在 <code>git add</code> 之後，又修改了那個檔案的內容？</p><p>在 <code>index.html</code> 檔案被安置到<strong>暫存區</strong>後，又對這個檔案進行了修改，使用 <code>git status</code> 指令查詢目錄狀態：</p>  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line"></span><br><span class="line">No commits yet</span><br><span class="line"></span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use <span class="string">&quot;git rm --cached &lt;file&gt;...&quot;</span> to unstage)</span><br><span class="line"></span><br><span class="line">        new file:   index.html</span><br><span class="line"></span><br><span class="line">Changes not staged <span class="keyword">for</span> commit:</span><br><span class="line">  (use <span class="string">&quot;git add &lt;file&gt;...&quot;</span> to update what will be committed)</span><br><span class="line">  (use <span class="string">&quot;git restore &lt;file&gt;...&quot;</span> to discard changes <span class="keyword">in</span> working directory)</span><br><span class="line"></span><br><span class="line">        modified:   index.html</span><br></pre></td></tr></table></figure><p>對 Git 來說，<code>index.html</code> 檔案修改後的內容並沒有被加到暫存區裡，所以這時候在暫存區裡的 <code>index.html</code> 檔案是維持在<strong>修改前</strong>的狀態。如果確定檔案修改完畢，再次使用 <code>git add index.html</code> 指令，將 <code>index.html</code> 檔案安置到暫存區中。</p>
+          </div>
+<h3 id="把暫存區的內容提交到儲存庫裡存檔">把暫存區的內容提交到儲存庫裡存檔</h3>
+<p>要讓暫存區的內容永久地保存下來，需要使用 <code>git commit</code> 指令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git commit -m <span class="string">&#x27;&lt;create&gt; index.html&#x27;</span></span><br><span class="line">[master (root-commit) 7f7ec9c] &lt;create&gt; index.html</span><br><span class="line"> 1 file changed, 9 insertions(+)</span><br><span class="line"> create mode 100644 index.html</span><br></pre></td></tr></table></figure>
+<p>對 Git 來說，<code>git commit</code> 的意思是「<strong>把暫存區（Staging Area）的東西存放到儲存庫（Repository）裡</strong>」，對開發者而言，就是「我完成一個存檔（備份）的動作了」，這樣就建立了一個新的版本。</p>
+<p>在 <code>git commit</code> 後面加上 <code>-m '&lt;create&gt; index.html'</code> 的用意是說明「在這次的 Commit 做了什麼事」。在 Commit 的時候，如果沒有輸入這個訊息，Git 預設是不會讓你完成此次的 Commit。Commit Message 最主要的目的就是告訴自己以及其它人「這次的修改做了什麼」。</p>
+<p><img src="https://imgur.com/Nb1sc7J.png" alt="Git all state"></p>
+<div class="note danger">
+            <p>🔴<strong>注意</strong><br>要完成 <code>git commit</code> 指令，才是<strong>完整建立了一個版本</strong>的流程。每一次的 Commit 都只會處理暫存區裡的內容。</p>
+          </div>
+<h3 id="檢視提交的歷史記錄">檢視提交的歷史記錄</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span></span><br><span class="line">commit 7f7ec9cf6b7d1bdbc3972c8882f1278b9414d35e (HEAD -&gt; master)</span><br><span class="line">Author: AveryChen &lt;avery210412@gmail.com&gt;</span><br><span class="line">Date:   Tue Apr 26 23:03:16 2022 +0800</span><br><span class="line"></span><br><span class="line">    &lt;create&gt; index.html</span><br></pre></td></tr></table></figure>
+<p>最新提交的 Commit 會先被列出來，歷史紀錄會列出每筆 Commit 的 SHA-1 校驗碼、作者名字與電子郵件、寫入日期以及 Commit Message 等資訊。</p>
+<h3 id="Git-檔案追蹤機制">Git 檔案追蹤機制</h3>
+<p><img src="https://imgur.com/eY3vFN8.png" alt="Git file tracking"></p>
+<ul>
+<li>
+<p>Untracked file：尚未被追蹤的檔案</p>
+</li>
+<li>
+<p>Changes to be committed：已加入暫存區，準備變成一個 Commit 的檔案</p>
+</li>
+<li>
+<p>Changes not staged for commit：尚未加入到暫存區，但有被加入到追蹤的檔案</p>
+</li>
+</ul>
+<h3 id="刪除檔案-變更檔名">刪除檔案 / 變更檔名</h3>
+<h4 id="刪除檔案">刪除檔案</h4>
+<p>在 Git 裡，不管是刪除檔案或是變更檔名，對 Git 來說都是一種「修改」。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">rm</span> index.html</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line"></span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use <span class="string">&quot;git restore --staged &lt;file&gt;...&quot;</span> to unstage)</span><br><span class="line"></span><br><span class="line">        deleted:   index.html</span><br></pre></td></tr></table></figure>
+<p><code>index.html</code> 檔案目前的狀態是 <strong>deleted</strong>，而且已經被安置到暫存區中，可以直接進行 Commit。</p>
+<p>如果只是想把檔案從 <code>.git</code> 目錄中移除，<strong>不再進行 Git 版本控制</strong>，可以在 <code>git rm &lt;file&gt;</code> 指令後面加上 <code>-–cached</code> 參數：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">rm</span> index.html --cache</span><br><span class="line"><span class="built_in">rm</span> <span class="string">&#x27;index.html&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>這個訊息並不是真的把 <code>index.html</code> 檔案刪除了，只是把檔案從 Git 裡移除而已。使用 <code>git status</code> 指令查詢目錄狀態：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line"></span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use <span class="string">&quot;git restore --staged &lt;file&gt;...&quot;</span> to unstage)</span><br><span class="line"></span><br><span class="line">        deleted:    index.html</span><br><span class="line"></span><br><span class="line">Untracked files:</span><br><span class="line">  (use <span class="string">&quot;git add &lt;file&gt;...&quot;</span> to include <span class="keyword">in</span> what will be committed)</span><br><span class="line"></span><br><span class="line">        index.html</span><br></pre></td></tr></table></figure>
+<p><code>index.html</code> 檔案的狀態從原本已經在暫存區裡的 <strong>Staged</strong> 變成 <strong>Untracked</strong>，這個檔案就沒有在 Git 版本控制的範圍內了。</p>
+<h4 id="變更檔名">變更檔名</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">mv</span> index.html home.html</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line"></span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use <span class="string">&quot;git restore --staged &lt;file&gt;...&quot;</span> to unstage)</span><br><span class="line"></span><br><span class="line">        renamed:   index.html -&gt; home.html</span><br></pre></td></tr></table></figure>
+<p><code>index.html</code> 檔案目前的狀態是 <strong>renamed</strong>，而且已經被安置到暫存區中，可以直接進行 Commit。</p>
+<h3 id="取消刪除-修改檔案">取消刪除 / 修改檔案</h3>
+<p>在 Git 裡面如果不小心把檔案或目錄刪掉是救得回來的，而當你修改某個檔案但後悔了，也可以把檔案回復成它上一次 Commit 的狀態。</p>
+<p>使用 <code>git checkout &lt;file&gt;</code> 指令，可以把檔案從 <code>.git</code> 目錄裡拉一份到目前的工作目錄（Working Directory），也就是說這個指令<strong>會把暫存區裡的內容，拿來覆蓋工作目錄的內容</strong>，它會把檔案回復到上一次 Commit 的狀態。</p>
+<ul>
+<li>刪除專案裡所有 HTML 檔案</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">rm</span> *.html</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line"></span><br><span class="line">Changes not staged <span class="keyword">for</span> commit:</span><br><span class="line">  (use <span class="string">&quot;git add/rm &lt;file&gt;...&quot;</span> to update what will be committed)</span><br><span class="line">  (use <span class="string">&quot;git restore &lt;file&gt;...&quot;</span> to discard changes <span class="keyword">in</span> working directory)</span><br><span class="line"></span><br><span class="line">        deleted:   about.html</span><br><span class="line">        deleted:   home.html</span><br><span class="line">        deleted:   index.html</span><br><span class="line">        deleted:   product.html</span><br><span class="line"></span><br><span class="line">no changes added to commit (use <span class="string">&quot;git add&quot;</span> and/or <span class="string">&quot;git commit -a&quot;</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>把被刪除的 <code>home.html</code> 檔案救回來：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout home.html</span><br><span class="line">Updated 1 path from the index</span><br></pre></td></tr></table></figure>
+<ul>
+<li>把所有被刪掉的檔案救回來：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout .</span><br><span class="line">Updated 3 paths from the index</span><br></pre></td></tr></table></figure>
+<h3 id="修改-Commit-紀錄">修改 Commit 紀錄</h3>
+<p>原本的歷史紀錄是這個樣子：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --oneline</span><br><span class="line">e624291 (HEAD -&gt; master) &lt;update&gt;</span><br><span class="line">7f7ec9c &lt;create&gt; index.html</span><br></pre></td></tr></table></figure>
+<p>需要修改<strong>最近一期</strong>的 Commit Message，在 <code>git commit</code> 指令後面加上 <code>--amend</code> 參數：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ git commit --amend -m <span class="string">&#x27;&lt;update&gt; rename index.html to home.html&#x27;</span></span><br><span class="line">[master 51032f3] &lt;update&gt; rename index.html to home.html</span><br><span class="line">  Date: Wed Apr 27 07:48:41 2022 +0800</span><br><span class="line">  1 file changed, 0 insertions(+), 0 deletions(-)</span><br><span class="line">  rename index.html =&gt; home.html (100%)</span><br></pre></td></tr></table></figure>
+<p>再次使用 <code>git log</code> 指令查詢歷史紀錄：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --oneline</span><br><span class="line">51032f3 (HEAD -&gt; master) &lt;update&gt; rename index.html to home.html</span><br><span class="line">7f7ec9c &lt;create&gt; index.html</span><br></pre></td></tr></table></figure>
+<p>雖然只是修改 Commit Message，其它檔案內容都沒有修改，但對 Git 來說，因為 <strong>Commit Message 的內容</strong>改變了，所以 Git 會重新計算並產生一個全新的 Commit。</p>
+<div class="note danger">
+            <p>🔴<strong>注意</strong><br>盡量不要在已經 Push 出去之後再修改 Commit Message，否則可能會造成其它開發者的困擾。</p>
+          </div>
+<p>如果檔案臨時做了一些小修改，不想再提交一個新的 Commit；或者是需要追加檔案到<strong>最近一期</strong>的 Commit，例如新增一個 <code>style.css</code> 檔案到目錄中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">touch</span> style.css</span><br><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line"></span><br><span class="line">Untracked files:</span><br><span class="line">  (use <span class="string">&quot;git add &lt;file&gt;...&quot;</span> to include <span class="keyword">in</span> what will be committed)</span><br><span class="line">        </span><br><span class="line">        style.css</span><br><span class="line"></span><br><span class="line">nothing added to commit but untracked files present (use <span class="string">&quot;git add&quot;</span> to track)</span><br></pre></td></tr></table></figure>
+<p>可以使用 <code>--amend</code> 參數進行 Commit，將 <code>style.css</code> 檔案併入最後一次的 Commit：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git add style.css</span><br><span class="line">$ git commit --amend -m <span class="string">&#x27;&lt;update / create&gt; index.html / style.css&#x27;</span></span><br><span class="line">[master c40dda8] &lt;update / create&gt; index.html / style.css</span><br><span class="line">  Date: Wed Apr 27 07:48:41 2022 +0800</span><br><span class="line">  2 files changed, 0 insertions(+), 0 deletions(-)</span><br><span class="line">  rename index.html =&gt; home.html (100%)</span><br><span class="line">  create mode 100644 style.css</span><br></pre></td></tr></table></figure>
+<p>使用 <code>git log</code> 指令查詢歷史紀錄：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --oneline</span><br><span class="line">c40dda8 (HEAD -&gt; master) &lt;update / create&gt; index.html / style.css</span><br><span class="line">7f7ec9c &lt;create&gt; index.html</span><br></pre></td></tr></table></figure>
+<h3 id="Git-版本還原">Git 版本還原</h3>
+<p>當送出 Commit 之後卻後悔了，有可能是發現了修改的檔案裡有 bugs，因此想要取消這次的 Commit，可以使用 <code>git reset</code> 指令。</p>
+<p>Reset 這個英文單字的翻譯是「重新設定」，但事實上 <code>git reset</code> 指令用中文來說比較像是「前往」，也就是「go to」的概念。因為實際上 <code>git reset</code> 並不是真的刪除或是重新設定 Commit，只是「前往」到指定的 Commit，那些看起來好像不見的東西只是暫時看不到，但隨時都可以再撿回來。</p>
+<p>使用 <code>git log</code> 指令查詢歷史紀錄：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --oneline</span><br><span class="line">9dcfb12 (HEAD -&gt; master) &lt;create&gt; database.yml <span class="keyword">in</span> config folder</span><br><span class="line">babb78d &lt;create&gt; product.html</span><br><span class="line">d2ba818 &lt;create&gt; index.html</span><br><span class="line">9d5b7d1 &lt;create&gt; about.html</span><br><span class="line">c49e0a8 &lt;crete&gt; gitignore</span><br><span class="line">c40dda8 &lt;update / create&gt; index.html / style.css</span><br><span class="line">7f7ec9c &lt;create&gt; index.html</span><br></pre></td></tr></table></figure>
+<p>如果想要拆掉<strong>最後一次</strong>的 Commit，也就是回到前一次 Commit，可以使用「<strong>相對</strong>」或「<strong>絕對</strong>」的做法。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用相對作法</span></span><br><span class="line">$ git reset 9dcfb12^</span><br><span class="line">$ git reset master^</span><br><span class="line">$ git reset HEAD^</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用絕對做法</span></span><br><span class="line">$ git reset babb78d</span><br></pre></td></tr></table></figure>
+<h3 id="Reset-的模式">Reset 的模式</h3>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>mixed</th>
+<th>soft</th>
+<th>hard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>工作目錄（Untracked）</td>
+<td>不變</td>
+<td>不變</td>
+<td>不變</td>
+</tr>
+<tr>
+<td>工作目錄（Modified）</td>
+<td>不變</td>
+<td>不變</td>
+<td>捨棄</td>
+</tr>
+<tr>
+<td>暫存區</td>
+<td>丟回工作目錄</td>
+<td>不變</td>
+<td>捨棄</td>
+</tr>
+<tr>
+<td>拆分 Commit，從儲存庫被拆出的檔案</td>
+<td>丟回工作目錄</td>
+<td>丟回暫存區</td>
+<td>捨棄</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Soft-reset">Soft reset</h4>
+<p><img src="https://imgur.com/sFl6rsZ.gif" alt="soft reset"></p>
+<h4 id="Hard-reset">Hard reset</h4>
+<p><img src="https://imgur.com/rOFASNC.gif" alt="hard reset"></p>
+<h3 id="忽略不要版本控制的檔案">忽略不要版本控制的檔案</h3>
+<p>一些比較機密的檔案，例如：資料庫的存取密碼、AWS 伺服器的存取金鑰；或是一些程式碼編譯的中間檔、暫存檔，不想放在 Git 裡面一起備份，只要在專案目錄裡放一個 <code>.gitignore</code> 檔案，並且設定想要忽略的規則就行了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># .gitignore.text</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 忽略 secret.yml 檔案</span></span><br><span class="line">secret.yml   </span><br><span class="line"></span><br><span class="line"><span class="comment"># 忽略 config 目錄下的 database.yml 檔案</span></span><br><span class="line">config/database.yml</span><br><span class="line"></span><br><span class="line"><span class="comment"># 忽略所有 db 目錄下附檔名是 .sqlite3 的檔案</span></span><br><span class="line">/db/*.sqlite3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 忽略所有附檔名是 .tmp 的檔案</span></span><br><span class="line">*.tmp</span><br></pre></td></tr></table></figure>
+<div class="note danger">
+            <p>🔴<strong>注意</strong><br><code>.gitignore</code> 檔案設定的規則，只針對在規則設定之後有成效，對於在 <code>.gitignore</code> 檔案設定規則以前，就已經存在的檔案就像既得利益者一樣，這些規則是對他們沒有效果的。</p>
+          </div>
+<h3 id="拿到一個新專案的步驟">拿到一個新專案的步驟</h3>
+<ol>
+<li>
+<p>加入版本控制 <code>git init</code></p>
+</li>
+<li>
+<p>建立 <code>.gitignore</code> 排除需要忽略的檔案，<code>.gitignore</code> 檔案也需要加入版控（其他協作者才知道）</p>
+</li>
+<li>
+<p>使用 <code>git add .</code> 將檔案加入版控，因為是<strong>新建立的檔案</strong>，不能直接使用 <code>git commit -am</code>（新增的檔案還不在暫存區）</p>
+</li>
+<li>
+<p>如果是<strong>已經加入版控</strong>的檔案，可以直接使用 <code>git commit -am</code> 合併指令</p>
+</li>
+<li>
+<p>建立 <code>develop</code>、<code>feature</code> 分支，進行開發作業</p>
+</li>
+</ol>
+<h2 id="使用分支（branch）">使用分支（branch）</h2>
+<p>在增加新功能、修正 bug，或是想嘗試一些新做法時，都可以另外開一個分支來進行，等開發完確認沒問題之後再合併回來，就不會影響正在運行的功能。簡而言之，branch 的作用就是讓開發過程各自獨立。</p>
+<p><img src="https://imgur.com/wQmzfvH.png" alt="branch"></p>
+<h3 id="分支的本質">分支的本質</h3>
+<p>在 Git 裡⾯的分⽀，其實就跟<strong>⼀張貼紙</strong>⼀樣，它會貼在某個 Commit 上：</p>
+<p><img src="https://imgur.com/eAJMurC.png" alt="branch"></p>
+<p>當完成了一個新的 Commit，新的 Commit 會指向它的前一個 Commit，而目前的分支，會貼到剛剛完成的新的 Commit 上。也就是說分支會隨著每次 Commit 的新增一起移動：</p>
+<p><img src="https://imgur.com/Edjec69.png" alt="branch on new commit"></p>
+<p>在 Git 的分⽀並不是複製⽬錄或檔案來進⾏開發與修改，<strong>分⽀就只是⼀個指標、⼀張貼紙，貼在某個 Commit 上⾯⽽已</strong>。</p>
+<h3 id="查看專案分支">查看專案分支</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git branch</span><br><span class="line">* master</span><br></pre></td></tr></table></figure>
+<h3 id="建立分支">建立分支</h3>
+<p>開發新功能之前，養成建立新分支的好習慣。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git branch develop</span><br><span class="line">$ git branch</span><br><span class="line">  develop</span><br><span class="line">* master</span><br></pre></td></tr></table></figure>
+<h3 id="切換分支">切換分支</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout develop</span><br><span class="line">Switched to branch <span class="string">&#x27;develop&#x27;</span></span><br><span class="line"></span><br><span class="line">$ git branch</span><br><span class="line">* develop</span><br><span class="line">  master</span><br></pre></td></tr></table></figure>
+<h4 id="在切換分⽀的時候發⽣了什麼事？">在切換分⽀的時候發⽣了什麼事？</h4>
+<ol>
+<li>
+<p>更新暫存區以及⼯作⽬錄</p>
+<p>Git 在切換分⽀的時候，會⽤該分⽀指向的那個 Commit 的內容來「更新」暫存區以及⼯作⽬錄。但是<strong>在切換分⽀之前所做的修改則還是會留在⼯作⽬錄</strong>，也就是說換切分⽀並<strong>不會影響已經在⼯作⽬錄的那些修改</strong>。</p>
+</li>
+<li>
+<p>變更 HEAD 的位置</p>
+<p>除了更新暫存區以及⼯作⽬錄的內容外，同時 HEAD 也會指向剛剛切換過去的那個分⽀，也就是說 <code>.git/HEAD</code> 這個檔案會跟著被修改。</p>
+</li>
+</ol>
+<h3 id="修改分支名稱">修改分支名稱</h3>
+<p>分支改名<strong>不會影響到檔案或目錄</strong>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch -m &lt;old branch-name&gt; &lt;new branch-name&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="刪除分支">刪除分支</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ git branch feature</span><br><span class="line">$ git branch</span><br><span class="line">* develop</span><br><span class="line">  feature</span><br><span class="line">  master</span><br><span class="line">$ git branch -d feature</span><br><span class="line">Deleted branch feature (was babb78d).</span><br></pre></td></tr></table></figure>
+<p>如果要刪除的分支還沒被完全合併，Git 會有小提示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git branch -d feature</span><br><span class="line">error: The branch <span class="string">&#x27;feature&#x27;</span> is not fully merged.</span><br><span class="line">If you are sure you want to delete it, run <span class="string">&#x27;git branch -D cat&#x27;</span>.</span><br></pre></td></tr></table></figure>
+<p>如果刪除了<strong>尚未被合併完成</strong>的分支，但事後反悔了想將檔案救回來，還是有方法可行的。</p>
+<p><img src="https://imgur.com/BOWWGhq.png" alt="delete unmerged branch"></p>
+<p>從上圖可以看到，即便刪除了分支，但在該分支上原先的 Commit 依然保存著，那是因為<strong>分支只是一個指向某個 Commit 的指標，刪除這個指標並不會造成那些 Commit 消失</strong>。既然 Commit 沒有消失，就意味著還是可以重新把它找回來：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git branch return_dev b174a5</span><br></pre></td></tr></table></figure>
+<p>這個指令的意思是「建立一個名為 <code>return_dev</code> 的分支，讓它指向 <code>b174a5a</code> 這個 Commit」，簡單來說就是再去拿一張新的貼紙貼回去的意思。</p>
+<div class="note warning">
+            <p>🌕<strong>補充</strong><br>如果沒有把被刪除的分支的 SHA-1 值記下來，該怎麼復原？</p><p>可以使用 <code>git reflog</code> 指令去查找。當 <code>HEAD</code> 有移動的時候（例如：切換分支或是 reset，都會造成 <code>HEAD</code> 移動），Git 就會在 Reflog 裡記上一筆。</p>
+          </div>
+<h3 id="合併分支">合併分支</h3>
+<p>當在 <code>develop</code> 分支開發完新功能，要將功能上線到穩定系統，也就是把 <code>develop</code> 分支合併到主要分支 <code>master</code>，需要以下步驟：</p>
+<ol start="0">
+<li>
+<p>使用 <code>git log</code> 指令查詢歷史紀錄：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">log</span> --oneline</span><br><span class="line">87e0bb8 (HEAD -&gt; develop) &lt;create&gt; product management feature</span><br><span class="line">a3664cb &lt;create&gt; product page</span><br><span class="line">6b9bf18 (master) &lt;create&gt; main feature</span><br><span class="line">dbbcdd9 &lt;create&gt; home style</span><br><span class="line">4c6862a &lt;create&gt; home page</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>切回主要分支 <code>master</code></p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout master</span><br><span class="line">Switched to branch <span class="string">&#x27;master&#x27;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>輸入要合併的分支名稱</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git merge develop</span><br><span class="line">Updating 6b9bf18..87e0bb8</span><br><span class="line">Fast-forward</span><br><span class="line">product.html | 0</span><br><span class="line">product.js   | 0</span><br><span class="line">2 files changed, 0 insertions(+), 0 deletions(-)</span><br><span class="line">create mode 100644 product.html</span><br><span class="line">create mode 100644 product.js</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>在 <code>develop</code> 分支新增的 <code>product.html</code> 與 <code>product.js</code> 兩個檔案，因為主要分支 <code>master</code> 現在已經合併了 <code>develop</code> 分支，所以現在在主要分支 <code>master</code> 上也有這兩個檔案了。</p>
+<div class="note danger">
+            <p>🔴<strong>注意</strong><br>所謂的 Merge 並不是指分支與分支之間的合併，而是去 Merge 「<strong>該分支所指向的那些 Commit</strong>」。</p>
+          </div>
+<h4 id="快轉模式（Fast-Forward）">快轉模式（Fast Forward）</h4>
+<p>快轉模式是指當主要分支 <code>master</code> 合併 <code>feature</code> 分支時，<code>master</code> 當前的節點一直和 <code>feature</code> 的根節點相同，沒有發生改變，此時就會採取「快轉模式」，其實就是把 <code>master</code> 這張貼紙撕起來，往前貼到 <code>feature</code> 分支所指的那個 Commit 而已。</p>
+<p><img src="https://imgur.com/gh2tuar.gif" alt="fast forward"></p>
+<h4 id="非快轉模式（No-Fast-Forward）">非快轉模式（No Fast Forward）</h4>
+<p>當主要分支 <code>master</code> 當前的節點與 <code>feature</code> 分支的根節點不同時，此時合併分支並不會觸發快轉模式，會額外產出一個 Commit。</p>
+<p><img src="https://imgur.com/kiAcFZ6.gif" alt="no fast forward"></p>
+<h3 id="另一種合併方式：rebase">另一種合併方式：rebase</h3>
+<p>rebase 這個英文單字的翻譯是「重新定義分支的<strong>參考基準</strong>」。Rebase 合併分支跟 Merge 合併分支最明顯的差異在於，使用 Rebase 合併分支，Git 不會特別產生一個專門用來合併的 Commit。</p>
+<blockquote>
+<p>A <code>git rebase</code> copies the commits from the current branch, and puts these copied commits on top of the specified branch.</p>
+</blockquote>
+<p><img src="https://imgur.com/OXgklx2.gif" alt="rebasing"></p>
+<h4 id="rebase-參考資料">rebase 參考資料</h4>
+<p><a target="_blank" rel="noopener" href="https://gitbook.tw/chapters/branch/merge-with-rebase">另一種合併方式（使用 rebase）</a></p>
+<h3 id="合併時發生衝突（Merge-Conflict）">合併時發生衝突（Merge Conflict）</h3>
+<p>Git 有能力幫忙檢查簡單的衝突，所以並不是改到同一個檔案就一定會發生衝突，但是改到<strong>同一個檔案的同一行程式碼</strong>就沒辦法了。Git 無法幫你選擇哪一個當作最終版本，所以當發生衝突時，只能「自己手動調整」。</p>
+<p>假設現在有一個 <code>index.html</code> 檔案，主要分支 <code>master</code> 與 <code>develop</code> 分支都同時修改了這個檔案，如果想要把 <code>develop</code> 分支 Merge 到主要分支 <code>master</code> 上，會出現以下訊息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ git merge develop</span><br><span class="line">Auto-merging index.html</span><br><span class="line">CONFLICT (content): Merge conflict <span class="keyword">in</span> index.html</span><br><span class="line">Automatic merge failed; fix conflicts and <span class="keyword">then</span> commit the result.</span><br></pre></td></tr></table></figure>
+<p>使用 <code>git status</code> 指令查詢目錄狀態：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$ git status</span><br><span class="line">On branch master</span><br><span class="line">You have unmerged paths.</span><br><span class="line">  (fix conflicts and run <span class="string">&quot;git commit&quot;</span>)</span><br><span class="line">  (use <span class="string">&quot;git merge --abort&quot;</span> to abort the merge)</span><br><span class="line"></span><br><span class="line">Unmerged paths:</span><br><span class="line">  (use <span class="string">&quot;git add &lt;file&gt;...&quot;</span> to mark resolution)</span><br><span class="line"></span><br><span class="line">        both modified:   index.html</span><br><span class="line"></span><br><span class="line">no changes added to commit (use <span class="string">&quot;git add&quot;</span> and/or <span class="string">&quot;git commit -a&quot;</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>You have unmerged paths.</p>
+</blockquote>
+<p>你有一個未合併的路徑。意思就是<strong>目前的合併尚未完成</strong>。</p>
+<p>進入 <code>index.html</code> 檔案會顯示衝突發生的位置，需要手動調整檔案內容：</p>
+<p><img src="https://imgur.com/rSN5i9L.png" alt="merge conflict message"></p>
+<p>Git 會把有衝突的段落標記出來了：</p>
+<ul>
+<li>
+<p>上半部是 <code>HEAD</code>，也就是目前所在的主要分支 <code>master</code></p>
+</li>
+<li>
+<p>中間是分隔線</p>
+</li>
+<li>
+<p>下半部是被合併的分支，也就是 <code>develop</code> 分支</p>
+</li>
+</ul>
+<p>修改完發生衝突的段落後，還是要把檔案重新安置到暫存區，並完成 Commit Message，才算解決 Merge Conflict。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git add index.html</span><br><span class="line">$ git commit -m <span class="string">&#x27;conflict fixed&#x27;</span></span><br><span class="line">[master d634e31] conflict fixed</span><br></pre></td></tr></table></figure>
+<p><img src="https://imgur.com/UWOIgkf.gif" alt="merge conflict"></p>
+<h2 id="使用-GitHub-遠端共同協作">使用 GitHub 遠端共同協作</h2>
+<p>Git 是一個分散式版本控制工具，藉由它可以產生一個儲存庫（Repository），裡面存放著被 Git 版本控制的專案。</p>
+<p>GitHub 是目前全球最大的 Git Server，許多 Open-source 的專案都是使用 Github 進行程式碼的管理，可以把 GitHub 想成「<strong>提供存放 / 使用 Git 專案儲存庫（Repository）的服務</strong>」。</p>
+<h3 id="將本地端-Repository-推送到遠端">將本地端 Repository 推送到遠端</h3>
+<ol>
+<li>
+<p>在 Github 上建立一個 Repository</p>
+<p><img src="https://imgur.com/zStUuVM.png" alt="create repository"></p>
+</li>
+<li>
+<p>建立好遠端 Repository 後，有兩種方式將本地端 Repository 與 GitHub 的遠端 Repository 連結：</p>
+<ul>
+<li>
+<p>如果是全新開始，依照「create a new repository on the command line」指示進行</p>
+</li>
+<li>
+<p>如果是要上傳現存專案，依照「push an existing repository from the command line」指示進行</p>
+</li>
+</ul>
+<p><img src="https://imgur.com/SXpZV0E.png" alt="remote guide"></p>
+</li>
+<li>
+<p>以全新開始的專案為例：</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> /desktop          </span><br><span class="line">$ <span class="built_in">mkdir</span> git-practice</span><br><span class="line">$ <span class="built_in">cd</span> git-practice</span><br><span class="line"></span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">&#x27;# Git Practice&#x27;</span> &gt;&gt; README.md</span><br><span class="line"></span><br><span class="line">$ git init</span><br><span class="line">Initialized empty Git repository <span class="keyword">in</span> /desktop/git-practice/.git/</span><br><span class="line"></span><br><span class="line">$ git add README.md</span><br><span class="line"></span><br><span class="line">$ git commit -m <span class="string">&#x27;initial commit&#x27;</span></span><br><span class="line">[master (root-commit) 542dc7e] initial commit</span><br><span class="line">1 file changed, 1 insertion(+)</span><br><span class="line">create mode 100644 README.md</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>將本地端 Repository 推送到 GitHub</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add origin https://github.com/avery210412/git-practice.git</span><br></pre></td></tr></table></figure>
+<p>意思是「<strong>將本地端 Repository 新增一個名為 <code>origin</code> 的遠端 Repository</strong>」。</p>
+<ul>
+<li>
+<p><code>git remote</code>：主要是跟遠端有關的操作</p>
+</li>
+<li>
+<p><code>add</code>：要加入一個遠端的節點</p>
+</li>
+<li>
+<p><code>origin</code>：是一個「代名詞」，指的是後面那串 GitHub 伺服器的位置</p>
+</li>
+</ul>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git push -u origin master</span><br><span class="line">Enumerating objects: 3, <span class="keyword">done</span>.</span><br><span class="line">Counting objects: 100% (3/3), <span class="keyword">done</span>.</span><br><span class="line">Writing objects: 100% (3/3), 229 bytes | 229.00 KiB/s, <span class="keyword">done</span>.</span><br><span class="line">Total 3 (delta 0), reused 0 (delta 0), pack-reused 0</span><br><span class="line">To https://github.com/avery210412/git-practice.git</span><br><span class="line">* [new branch]      master -&gt; master</span><br><span class="line">Branch <span class="string">&#x27;master&#x27;</span> <span class="built_in">set</span> up to track remote branch <span class="string">&#x27;master&#x27;</span> from <span class="string">&#x27;origin&#x27;</span>.</span><br></pre></td></tr></table></figure>
+<p><code>git push</code> 指令其實做了幾件事：</p>
+<ul>
+<li>
+<p>把 <code>master</code> 這個分支的內容，推向 <code>origin</code> 指向的 GitHub 伺服器位置</p>
+</li>
+<li>
+<p>在 <code>origin</code> 指向的伺服器上，如果 <code>master</code> 分支不存在，就建立一個叫做 <code>master</code> 的同名分支。</p>
+</li>
+<li>
+<p>如果伺服器上原本就存在 <code>master</code> 分支，便會移動伺服器上 <code>master</code> 分支的位置，使它指到目前最新的 Commit 上。</p>
+</li>
+<li>
+<p><code>-u</code>：設定 <code>upstream</code>，使本地端分支開始追蹤指定的遠端分支，也就是說現在開始，「<strong>本地端的 <code>master</code> 分支，會去追蹤遠端 origin 上的 <code>master</code> 分支</strong>」</p>
+</li>
+</ul>
+</li>
+<li>
+<p>回到瀏覽器上重新整理頁面：</p>
+<p><img src="https://imgur.com/o7Jjyn1.png" alt="push repository finished"></p>
+<p>看到這個畫面，表示已經順利把本地端 Repository 的東西，推送到這個遠端 Repository 裡面了。</p>
+</li>
+</ol>
+<div class="note ">
+            <p>🌀<strong>狀況題</strong><br>如何修改已經 Push 到遠端的 Commit？</p><p>假設現在已經完成一個 Commit，並且也推送到遠端 Repository 上，如果此時專案中的檔案做了一些小修改，但是又不想在這個 Commit 以後再新增一個 Commit 記錄此次的修改，只想要修改上一次的 Commit 並且重新 Push 到遠端 Repository，可以這樣操作：</p><ol><li><p>使用 <code>--amend</code> 參數進行 Commit，來修改上一次的 Commit，此時 SHA-1 值會重新計算</p></li><li><p>使用 <code>git push --force-with-lease origin &lt;branch&gt;</code>，將 Commit 推送至遠端 Repository</p></li></ol>
+          </div>
+<h4 id="git-push-參考資料"><code>git push</code> 參考資料</h4>
+<p><a target="_blank" rel="noopener" href="https://youtu.be/VShhhq_5sMc">如何使用 git push 指令只 Push 部份的進度？</a></p>
+<p><a target="_blank" rel="noopener" href="https://gitbook.tw/chapters/github/fail-to-push">怎麼有時候推不上去</a></p>
+<p><a target="_blank" rel="noopener" href="https://tinyurl.com/y6gtw7s8">修改已經 Push 到遠端 Repository 的 Commit</a></p>
+<h3 id="將遠端-Repository-同步至本地端">將遠端 Repository 同步至本地端</h3>
+<h4 id="Fetch">Fetch</h4>
+<p>當本地端 Repository 已經推送到遠端時，目前的分支圖如下：</p>
+<p><img src="https://imgur.com/TR4NUjH.png" alt="git branching diagram"></p>
+<p>假使這個專案由多人協作開發，某位開發者 Push 了新的功能，此時遠端 Repository 就會新增一個 Commit：</p>
+<p><img src="https://imgur.com/5Pngthu.png" alt="push a new feature"></p>
+<p>此時，若想要把遠端 Repository 的最新版本下載回本地端，但又擔心下載後，會與本地端的 Repository 發生合併衝突（Merge Conflict）的情形，此時可以使用 <code>git fetch</code> 指令。</p>
+<p>當執行 Fetch 指令時，Git 會看一下遠端 Repository 的最新版本內容，在比較一下此時本地端 Repository 的內容，它會<strong>把遠端有但是本地端沒有的內容</strong>下載到本地端 Repository，但是<strong>不會將這些內容合併到本地端 Repository</strong>，因此分支圖還是會維持上面的情況：</p>
+<p><img src="https://imgur.com/5Pngthu.png" alt="git fetch"></p>
+<p>由於 <code>origin/master</code> 這個遠端分支，是從本地端 <code>master</code> 分支推送到 GitHub 進而產生的，因此 <code>origin/master</code> 分支跟 <code>master</code> 分支<strong>本是同根生</strong>。如果要把 Fetch 得到的最新版本內容合併到本地端 Repository，會觸發快轉模式（Fast Forward），此時的分支圖如下：</p>
+<p><img src="https://imgur.com/QUQ5aAH.png" alt="Fetch and Merge"></p>
+<p><img src="https://imgur.com/tPCaQE5.gif" alt="Fetch"></p>
+<h4 id="Pull">Pull</h4>
+<blockquote>
+<p><em>git pull = git fetch + git merge</em></p>
+</blockquote>
+<p>Pull 指令就是將遠端 Repository 的最新版本下載回本地端，並且將遠端分支合併到本地分支，也就是將 <code>origin/master</code> 這個遠端分支<strong>直接合併</strong>到本地端 <code>master</code> 分支。</p>
+<p><img src="https://imgur.com/RtefJ9S.gif" alt="Pull"></p>
+<h3 id="從-GitHub-伺服器上取得-Repository">從 GitHub 伺服器上取得 Repository</h3>
+<p>如果在 GitHub 上看到某個專案很有趣，想要下載到本地端研究，使用 Clone 指令就可以把整個專案複製一份到本地端了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/sparanoid/chinese-copywriting-guidelines.git</span><br><span class="line">Cloning into <span class="string">&#x27;chinese-copywriting-guidelines&#x27;</span>...</span><br><span class="line">remote: Enumerating objects: 907, <span class="keyword">done</span>.</span><br><span class="line">remote: Counting objects: 100% (212/212), <span class="keyword">done</span>.</span><br><span class="line">remote: Compressing objects: 100% (98/98), <span class="keyword">done</span>.</span><br><span class="line">remote: Total 907 (delta 137), reused 181 (delta 113), pack-reused 695</span><br><span class="line">Receiving objects: 100% (907/907), 354.90 KiB | 2.25 MiB/s, <span class="keyword">done</span>.</span><br><span class="line">Resolving deltas: 100% (529/529), <span class="keyword">done</span>.</span><br></pre></td></tr></table></figure>
+<p>Clone 指令會把整個專案的內容複製一份到本地端，也就是你的電腦裡，這裡指的「內容」不是只有檔案，而是指<strong>整個專案的歷史紀錄、分支、標籤等</strong>內容都會複製一份下來。</p>
+<div class="note danger">
+            <p>🔴<strong>注意</strong><br>如果這個專案你是第一次看到，想要下載到你的電腦裡，請使用 Clone 指令；如果你已經下載過這個專案，只是想要更新最新的線上版本內容，請使用 Pull（Fetch）指令。<br><strong>Clone 指令通常只會在第一次下載時使用，Clone 之後的更新，就是 Pull / Fetch 的事了。</strong></p>
+          </div>
+<h2 id="使用-GitHub-Flow-參與開源專案">使用 GitHub Flow 參與開源專案</h2>
+<p>Git 儲存庫並沒有<strong>權限控管</strong>的概念。當越多人參與同一個專案，每個人都有存取這個儲存庫的權限時，可能會遇到一些協同開發上的問題，例如：每個人都可以 Commit 到專案正式上線的分支（例如：<code>master</code>），在這種情況下，不同人彼此之間的程式碼會互相干擾。</p>
+<p>GitHub 提供了 Fork 與 Pull Request 的機制，賦予儲存庫基本的權限控管。</p>
+<h3 id="GitHub-Flow">GitHub Flow</h3>
+<p><img src="https://i.imgur.com/gns2luN.png" alt="GitHub Flow"></p>
+<p>GitHub Flow 是一個基於分支（branch）的輕量化工作流程，藉由分支去管理功能的開發，以及來自社群的貢獻。</p>
+<p>遵守 GitHub Flow 進行開發有一個規則：<strong><code>master</code> 分支必須保持隨時可以部屬正式環境（Production Ready）的狀態</strong>。</p>
+<h3 id="GitHub-Flow-步驟">GitHub Flow 步驟</h3>
+<h4 id="Fork">Fork</h4>
+<p><img src="https://imgur.com/Oq2TpJc.png" alt="fork repository"></p>
+<p>如果想要參與一個你沒有推送（Push）權限的專案，可以先複製（<strong>Fork</strong>）一份原始專案的<strong>副本</strong>到自己的 GitHub 帳號底下，你對這個副本有全部的權限，之後的任何修改都在這個副本中執行。</p>
+<p>所有人都可以 Fork 專案，對 Fork 出來的副本推送變更，然後去發送 Pull Request，來把這些變更貢獻回原始專案裡。</p>
+<blockquote>
+<p>Fork 這個字在這邊翻譯成「複製」並不是這個字的原意，在技術圈來說這個詞使用的情境是「原作的做的不夠好，其它人覺得可以做得更好，或是想加入一些個人喜好的功能，而修改出另外的版本」。</p>
+</blockquote>
+<h4 id="Branch">Branch</h4>
+<p><img src="https://i.imgur.com/YxNhiqA.png" alt="Create Branch"></p>
+<p>將副本 Clone 到本地端，第一件事情就是<strong>建立新分支</strong>，之後的修改和討論都會<strong>以這個分支為基準</strong>。</p>
+<p>在專案建立一個分支，代表建立了一個環境來開發功能，在分支上所做的修改，都不會影響到 <code>master</code> 分支，所以可以自由的嘗試並提交修改。</p>
+<h4 id="Commits">Commits</h4>
+<p><img src="https://i.imgur.com/ehEeTyx.png" alt="Add Commits"></p>
+<p>在對專案進行功能開發、修改之前，執行 <code>git remote -v</code> 查看 Git 的遠端設定：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git remote -v</span><br><span class="line">origin  https://github.com/avery210412/chinese-copywriting-guidelines.git (fetch)</span><br><span class="line">origin  https://github.com/avery210412/chinese-copywriting-guidelines.git (push)</span><br></pre></td></tr></table></figure>
+<p>建議對 Git 的遠端設定進行調整，<strong>將 fetch 的遠端位置，改成原始專案的位置</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ git remote set-url origin https://github.com/sparanoid/chinese-copywriting-guidelines.git</span><br><span class="line">$ git remote -v</span><br><span class="line">origin  https://github.com/sparanoid/chinese-copywriting-guidelines.git (fetch)</span><br><span class="line">origin  https://github.com/sparanoid/chinese-copywriting-guidelines.git (push)</span><br><span class="line"></span><br><span class="line">$ git remote set-url --push origin https://github.com/avery210412/chinese-copywriting-guidelines.git</span><br><span class="line">$ git remote -v</span><br><span class="line">origin  https://github.com/sparanoid/chinese-copywriting-guidelines.git (fetch)</span><br><span class="line">origin  https://github.com/avery210412/chinese-copywriting-guidelines.git (push)</span><br></pre></td></tr></table></figure>
+<p>這樣設定可以達到以下好處：</p>
+<ul>
+<li>
+<p>之後會從原始專案中取得最新的專案資料（fetch），保持專案的一致性</p>
+</li>
+<li>
+<p>所有修改的資料只會推送到自己的專案中（push），不會影響到其他人</p>
+</li>
+</ul>
+<p>完成設定後，就可以對專案進行功能開發。</p>
+<h4 id="Pull-Request">Pull Request</h4>
+<p><img src="https://i.imgur.com/1XdLZa1.png" alt="Open Pull Request"></p>
+<p>功能開發完成後，將本地端的 Repository 推送到遠端的 GitHub Repository。</p>
+<p>此時可以在 GitHub 上建立一個 Pull Request，Pull Request 提供了一個方式法來通知專案維護者，是否考慮使用你所做的修改。</p>
+<p>這邊特別說明一件事，每個專案可能都有自己的規範，通常會寫在專案的 <code>README.md</code> 或是 <code>CONTRIBUTING.md</code>，請務必在修改或提交前，閱讀專案的規範，維持開源專案的品質。</p>
+<h4 id="Discuss-And-Review">Discuss And Review</h4>
+<p><img src="https://i.imgur.com/ser2wXQ.png" alt="Discuss And Review"></p>
+<p>專案維護者在檢視你所貢獻的程式碼後，可以在該 PR 中進行討論，討論程式碼內容或關於修改的建議，過程中如果有需要修改的地方，可以直接在該分支中做修改，因為 PR 是看分支的，所以該分支於 PR 確認合併前，都可以新增 Commit，並納入該 PR 中。</p>
+<h4 id="Deploy">Deploy</h4>
+<p><img src="https://imgur.com/ibRwwDN.png" alt="Test Deploy"></p>
+<p>正式合併到 <code>master</code> 分支之前，在這個階段可以先部署到測試環境，以進行合併前的最終測試。如果測試沒有通過或產生任何可以討論的議題，則可以取消合併，在通過一系列的測試後，才可以發佈到正式環境（Production Ready）上。</p>
+<h4 id="Merge">Merge</h4>
+<p><img src="https://i.imgur.com/IYJgbY5.png" alt="Merge"></p>
+<p>當所貢獻的程式碼經過一連串的檢閱、測試後，具有<strong>原始專案合併權限的人</strong>，就可以將你的貢獻合併到原始專案中了，你也成為原始專案的貢獻者（Contributions）之一了。</p>
+<h4 id="GitHub-Flow-參考資料">GitHub Flow 參考資料</h4>
+<p><a target="_blank" rel="noopener" href="https://blog.poychang.net/guide-to-use-github-flow/">如何使用 GitHub Flow 來參與開源專案</a></p>
+<p><a target="_blank" rel="noopener" href="https://reurl.cc/1ZYDqp">讓我們來了解 GitHub Flow 吧！</a></p>
+<h2 id="總結">總結</h2>
+<p><img src="https://i.imgur.com/zzNkt5X.jpg" alt="Git Cheat Sheet"></p>
+<h3 id="Git-版本控制參考資料">Git 版本控制參考資料</h3>
+<p><a target="_blank" rel="noopener" href="https://gitbook.tw/">為你自己學 Git</a></p>
+<p><a target="_blank" rel="noopener" href="https://dev.to/lydiahallie/cs-visualized-useful-git-commands-37p1">CS Visualized: Useful Git Commands</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Lidemy/" rel="tag"><i class="fa fa-tag"></i> Lidemy</a>
+              <a href="/tags/Git/" rel="tag"><i class="fa fa-tag"></i> Git</a>
+              <a href="/tags/GitHub/" rel="tag"><i class="fa fa-tag"></i> GitHub</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/tool/command-line-interface/" rel="prev" title="[CMD101] Command Line Interface">
+      <i class="fa fa-chevron-left"></i> [CMD101] Command Line Interface
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80-2"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-is-Git%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">What is Git？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-%E5%9F%BA%E6%9C%AC%E6%8C%87%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">Git 基本指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%AE%E9%8C%84"><span class="nav-number">3.1.</span> <span class="nav-text">初始化目錄</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E8%A9%A2%E7%9B%AE%E9%8C%84%E7%8B%80%E6%85%8B"><span class="nav-number">3.2.</span> <span class="nav-text">查詢目錄狀態</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E5%85%A5%E7%89%88%E6%8E%A7%E8%BF%BD%E8%B9%A4"><span class="nav-number">3.3.</span> <span class="nav-text">加入版控追蹤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%8A%E6%9A%AB%E5%AD%98%E5%8D%80%E7%9A%84%E5%85%A7%E5%AE%B9%E6%8F%90%E4%BA%A4%E5%88%B0%E5%84%B2%E5%AD%98%E5%BA%AB%E8%A3%A1%E5%AD%98%E6%AA%94"><span class="nav-number">3.4.</span> <span class="nav-text">把暫存區的內容提交到儲存庫裡存檔</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AA%A2%E8%A6%96%E6%8F%90%E4%BA%A4%E7%9A%84%E6%AD%B7%E5%8F%B2%E8%A8%98%E9%8C%84"><span class="nav-number">3.5.</span> <span class="nav-text">檢視提交的歷史記錄</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-%E6%AA%94%E6%A1%88%E8%BF%BD%E8%B9%A4%E6%A9%9F%E5%88%B6"><span class="nav-number">3.6.</span> <span class="nav-text">Git 檔案追蹤機制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%AA%E9%99%A4%E6%AA%94%E6%A1%88-%E8%AE%8A%E6%9B%B4%E6%AA%94%E5%90%8D"><span class="nav-number">3.7.</span> <span class="nav-text">刪除檔案 &#x2F; 變更檔名</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%AA%E9%99%A4%E6%AA%94%E6%A1%88"><span class="nav-number">3.7.1.</span> <span class="nav-text">刪除檔案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%8A%E6%9B%B4%E6%AA%94%E5%90%8D"><span class="nav-number">3.7.2.</span> <span class="nav-text">變更檔名</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%96%E6%B6%88%E5%88%AA%E9%99%A4-%E4%BF%AE%E6%94%B9%E6%AA%94%E6%A1%88"><span class="nav-number">3.8.</span> <span class="nav-text">取消刪除 &#x2F; 修改檔案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-Commit-%E7%B4%80%E9%8C%84"><span class="nav-number">3.9.</span> <span class="nav-text">修改 Commit 紀錄</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-%E7%89%88%E6%9C%AC%E9%82%84%E5%8E%9F"><span class="nav-number">3.10.</span> <span class="nav-text">Git 版本還原</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reset-%E7%9A%84%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.11.</span> <span class="nav-text">Reset 的模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Soft-reset"><span class="nav-number">3.11.1.</span> <span class="nav-text">Soft reset</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hard-reset"><span class="nav-number">3.11.2.</span> <span class="nav-text">Hard reset</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%BD%E7%95%A5%E4%B8%8D%E8%A6%81%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E7%9A%84%E6%AA%94%E6%A1%88"><span class="nav-number">3.12.</span> <span class="nav-text">忽略不要版本控制的檔案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%BF%E5%88%B0%E4%B8%80%E5%80%8B%E6%96%B0%E5%B0%88%E6%A1%88%E7%9A%84%E6%AD%A5%E9%A9%9F"><span class="nav-number">3.13.</span> <span class="nav-text">拿到一個新專案的步驟</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%88%86%E6%94%AF%EF%BC%88branch%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">使用分支（branch）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E7%9A%84%E6%9C%AC%E8%B3%AA"><span class="nav-number">4.1.</span> <span class="nav-text">分支的本質</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%B0%88%E6%A1%88%E5%88%86%E6%94%AF"><span class="nav-number">4.2.</span> <span class="nav-text">查看專案分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E5%88%86%E6%94%AF"><span class="nav-number">4.3.</span> <span class="nav-text">建立分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%87%E6%8F%9B%E5%88%86%E6%94%AF"><span class="nav-number">4.4.</span> <span class="nav-text">切換分支</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%A8%E5%88%87%E6%8F%9B%E5%88%86%E2%BD%80%E7%9A%84%E6%99%82%E5%80%99%E7%99%BC%E2%BD%A3%E4%BA%86%E4%BB%80%E9%BA%BC%E4%BA%8B%EF%BC%9F"><span class="nav-number">4.4.1.</span> <span class="nav-text">在切換分⽀的時候發⽣了什麼事？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%88%86%E6%94%AF%E5%90%8D%E7%A8%B1"><span class="nav-number">4.5.</span> <span class="nav-text">修改分支名稱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%AA%E9%99%A4%E5%88%86%E6%94%AF"><span class="nav-number">4.6.</span> <span class="nav-text">刪除分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E4%BD%B5%E5%88%86%E6%94%AF"><span class="nav-number">4.7.</span> <span class="nav-text">合併分支</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%AB%E8%BD%89%E6%A8%A1%E5%BC%8F%EF%BC%88Fast-Forward%EF%BC%89"><span class="nav-number">4.7.1.</span> <span class="nav-text">快轉模式（Fast Forward）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%9E%E5%BF%AB%E8%BD%89%E6%A8%A1%E5%BC%8F%EF%BC%88No-Fast-Forward%EF%BC%89"><span class="nav-number">4.7.2.</span> <span class="nav-text">非快轉模式（No Fast Forward）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%A6%E4%B8%80%E7%A8%AE%E5%90%88%E4%BD%B5%E6%96%B9%E5%BC%8F%EF%BC%9Arebase"><span class="nav-number">4.8.</span> <span class="nav-text">另一種合併方式：rebase</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#rebase-%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="nav-number">4.8.1.</span> <span class="nav-text">rebase 參考資料</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%88%E4%BD%B5%E6%99%82%E7%99%BC%E7%94%9F%E8%A1%9D%E7%AA%81%EF%BC%88Merge-Conflict%EF%BC%89"><span class="nav-number">4.9.</span> <span class="nav-text">合併時發生衝突（Merge Conflict）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-GitHub-%E9%81%A0%E7%AB%AF%E5%85%B1%E5%90%8C%E5%8D%94%E4%BD%9C"><span class="nav-number">5.</span> <span class="nav-text">使用 GitHub 遠端共同協作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%87%E6%9C%AC%E5%9C%B0%E7%AB%AF-Repository-%E6%8E%A8%E9%80%81%E5%88%B0%E9%81%A0%E7%AB%AF"><span class="nav-number">5.1.</span> <span class="nav-text">將本地端 Repository 推送到遠端</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#git-push-%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="nav-number">5.1.1.</span> <span class="nav-text">git push 參考資料</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%87%E9%81%A0%E7%AB%AF-Repository-%E5%90%8C%E6%AD%A5%E8%87%B3%E6%9C%AC%E5%9C%B0%E7%AB%AF"><span class="nav-number">5.2.</span> <span class="nav-text">將遠端 Repository 同步至本地端</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Fetch"><span class="nav-number">5.2.1.</span> <span class="nav-text">Fetch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pull"><span class="nav-number">5.2.2.</span> <span class="nav-text">Pull</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%9E-GitHub-%E4%BC%BA%E6%9C%8D%E5%99%A8%E4%B8%8A%E5%8F%96%E5%BE%97-Repository"><span class="nav-number">5.3.</span> <span class="nav-text">從 GitHub 伺服器上取得 Repository</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-GitHub-Flow-%E5%8F%83%E8%88%87%E9%96%8B%E6%BA%90%E5%B0%88%E6%A1%88"><span class="nav-number">6.</span> <span class="nav-text">使用 GitHub Flow 參與開源專案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHub-Flow"><span class="nav-number">6.1.</span> <span class="nav-text">GitHub Flow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHub-Flow-%E6%AD%A5%E9%A9%9F"><span class="nav-number">6.2.</span> <span class="nav-text">GitHub Flow 步驟</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Fork"><span class="nav-number">6.2.1.</span> <span class="nav-text">Fork</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Branch"><span class="nav-number">6.2.2.</span> <span class="nav-text">Branch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Commits"><span class="nav-number">6.2.3.</span> <span class="nav-text">Commits</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pull-Request"><span class="nav-number">6.2.4.</span> <span class="nav-text">Pull Request</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Discuss-And-Review"><span class="nav-number">6.2.5.</span> <span class="nav-text">Discuss And Review</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Deploy"><span class="nav-number">6.2.6.</span> <span class="nav-text">Deploy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Merge"><span class="nav-number">6.2.7.</span> <span class="nav-text">Merge</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GitHub-Flow-%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="nav-number">6.2.8.</span> <span class="nav-text">GitHub Flow 參考資料</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">7.</span> <span class="nav-text">總結</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="nav-number">7.1.</span> <span class="nav-text">Git 版本控制參考資料</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Avery"
+      src="/images/git-avatar.png">
+  <p class="site-author-name" itemprop="name">Avery</p>
+  <div class="site-description" itemprop="description">Welcome to my Hippocampus.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/avery210412" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;avery210412" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:avery210412@gmail.com" title="E-Mail → mailto:avery210412@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Avery</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
